@@ -1,0 +1,37 @@
+### get projects
+GET http://localhost:4000/api/projects HTTP/1.1
+
+
+
+### GET SINGLE PRODUCT
+GET http://localhost:4000/api/projects/one/622eaed0de2b037627edd8e6 HTTP/1.1
+
+### ADD ITEM
+POST http://localhost:4000/api/projects HTTP/1.1
+Content-Type: application/json
+{
+    "title": "Library Management System",
+    "technology": "MERN Stack",
+    "deadline": "02 April 2022",
+    "description": "create a project with MERN Stack with CRUD operations on library system"
+}
+
+### DELETE ITEM
+DELETE http://localhost:4000/api/projects/622c627f68d811c903dae677 HTTP/1.1
+
+### UPDATE ITEM
+PUT http://localhost:4000/api/projects/625b0046812e3707a0e1ba76 HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "ABCD 12"
+}
+
+### CREATE USER
+POST http://localhost:4000/api/users/signup HTTP/1.1
+Content-Type: application/json
+{
+  "email": "ayush@gmail.com",
+  "name": "ayush",
+  "password": "123456"
+}
