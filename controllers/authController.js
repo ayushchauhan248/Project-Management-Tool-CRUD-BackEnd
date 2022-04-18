@@ -29,7 +29,7 @@ const loginUser = async (req, res) => {
 };
 
 const meUser = (req, res) => {
-  res.json({ message: req.headers.authorization });
+  res.json(req.user);
 };
 
 const generateToken = (id) => {

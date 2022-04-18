@@ -1,10 +1,11 @@
 const Project = require("../models/Project");
+const User = require("../models/User");
 
 // get all project
 const projectAll = async (req, res) => {
   try {
-    const project = await Project.find();
-    res.json(project);
+    // const project = await Project.find();
+    res.json(req.user.projects);
   } catch (error) {
     res.json({ message: error });
   }
@@ -30,7 +31,11 @@ const addProject = async (req, res) => {
   });
 
   try {
+    const user_id = req.user._id;
     const savedProject = await project.save();
+    await User.findByIdAndUpdate(user_id, {
+      $push: { projects: savedProject },
+    });
     res.send(savedProject);
   } catch (error) {
     res.status(400).send(error);
@@ -60,7 +65,16 @@ const updateProject = async (req, res) => {
 // delete a project
 const deleteProject = async (req, res) => {
   try {
-    const removeProject = await Project.findByIdAndDelete(req.params.projectId);
+    const user_id = req.user._id;
+    const removeProject = await Project.findByIdAndDelete(req.params.dltid);
+    // console.log(removeProject);
+    await User.findOneAndUpdate(
+      { _id: user_id },
+      {
+        $pull: { projects: { $in: [removeProject._id] } },
+      },
+      { safe: true, multi: false }
+    );
     res.json(removeProject);
   } catch (error) {
     res.json({ message: error });
