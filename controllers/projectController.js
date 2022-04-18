@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const Project = require("../models/Project");
 const User = require("../models/User");
 
@@ -23,22 +24,23 @@ const projectOne = async (req, res) => {
 
 // add new project
 const addProject = async (req, res) => {
+  const error = validationResult(req);
+  // console.log(error);
   const project = new Project({
     title: req.body.title,
     technology: req.body.technology,
     deadline: req.body.deadline,
     description: req.body.description,
   });
-
-  try {
+  if (!error.isEmpty()) {
+    return res.status(400).send(error);
+  } else {
     const user_id = req.user._id;
     const savedProject = await project.save();
     await User.findByIdAndUpdate(user_id, {
       $push: { projects: savedProject },
     });
-    res.send(savedProject);
-  } catch (error) {
-    res.status(400).send(error);
+    return res.send(savedProject);
   }
 };
 
