@@ -7,7 +7,8 @@ const signupUser = async (req, res) => {
     const existingUser = await User.findOne({ email: user.email });
     if (existingUser === null) {
       const savedUser = await user.save();
-      return res.json(savedUser);
+      // return res.json(savedUser);
+      return res.json({ token: generateToken(savedUser._id) });
     }
     res.json({ message: "User already exists" });
   } catch (error) {
